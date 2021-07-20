@@ -9,8 +9,6 @@ import (
 	"net/http"
 	"vat/logger"
 	"vat/models"
-
-	"vat/reselience"
 )
 
 const (
@@ -41,7 +39,7 @@ func Validate(countryCode, vatNum string) (bool, error) {
 	}
 
 	// do the soap request
-	resp, err := reselience.CircuitBreaker(VatBreaker, req)
+	resp, err := CircuitBreaker(VatBreaker, req)
 	if err != nil {
 		logger.Error(err)
 		return false, err
@@ -55,6 +53,7 @@ func unmarshalVatReponse(res *http.Response) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	logger.Errorf("%+v", string(xmlRes))
 
 	// checks for the invalid input error
 	if bytes.Contains(xmlRes, []byte("INVALID_INPUT")) {
@@ -71,7 +70,6 @@ func unmarshalVatReponse(res *http.Response) (bool, error) {
 	if len(v.Soap.SoapFault.Message) != 0 {
 		return false, errors.New(v.Soap.SoapFault.Message)
 	}
-
 	// return the validation if no soap fault
 	return v.Soap.Soap.Valid, nil
 }

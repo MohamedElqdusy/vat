@@ -12,6 +12,14 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+var (
+	// ErrGermanySupport returned for non-german VAT
+	ErrGermanySupport error = errors.New("we only support DE")
+
+	// ErrShortVat returned for short VAT numbers
+	ErrShortVat error = errors.New("short VAT Num")
+)
+
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprintf(w, "Hello, welcome to the VAT validation service")
 }
@@ -45,14 +53,14 @@ func VatNumer(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 // validate the vat number initaliy before validating by VIES soap
 func checkVatNum(vatNum string) (string, string, error) {
 	if len(vatNum) < 3 {
-		return "", "", errors.New("short VAT Num")
+		return "", "", ErrShortVat
 	}
 	countryName := vatNum[0:2]
 	vatNumber := vatNum[2:]
 
 	// Valid for Germany only
 	if countryName != "DE" {
-		return "", "", errors.New("we only support DE")
+		return "", "", ErrGermanySupport
 	}
 
 	return countryName, vatNumber, nil

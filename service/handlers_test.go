@@ -56,13 +56,13 @@ func TestVatNumerErrors(t *testing.T) {
 			Name:          "Germany validation only",
 			URL:           "/vat/AT266182271",
 			ExpectedCode:  http.StatusBadRequest,
-			ExpectedError: "we only support DE",
+			ExpectedError: ErrGermanySupport.Error(),
 		},
 		{
 			Name:          "too short vat",
 			URL:           "/vat/01",
 			ExpectedCode:  http.StatusBadRequest,
-			ExpectedError: "short VAT Num",
+			ExpectedError: ErrShortVat.Error(),
 		},
 	}
 

@@ -1,0 +1,7 @@
+### home page
+GET http://localhost:7888/
+Content-Type: "application/json"
+
+### VAT validation
+GET http://localhost:7888/vat/DE266182271
+Content-Type: "application/json"

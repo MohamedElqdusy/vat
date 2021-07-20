@@ -45,8 +45,6 @@ func TestValidate(t *testing.T) {
 			)
 		}
 	}
-	assert.Equal(t, 5, 6)
-
 }
 
 func TestUnmarshalVatReponse(t *testing.T) {

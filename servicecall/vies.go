@@ -53,7 +53,6 @@ func unmarshalVatReponse(res *http.Response) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	logger.Errorf("%+v", string(xmlRes))
 
 	// checks for the invalid input error
 	if bytes.Contains(xmlRes, []byte("INVALID_INPUT")) {
